@@ -1,4 +1,4 @@
-import {Form} from "./compoennts/";
+import {Form} from "./compoennts/shared/";
 
 function App() {
   return (
