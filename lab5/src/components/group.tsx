@@ -1,19 +1,26 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
+import {ChevronDown, ChevronUp, CircleX} from "lucide-react";
 import { useState } from "react";
 
-export function Group() {
+type Props = {
+    deleteGroupDispatch: () => void
+}
+
+export function Group({deleteGroupDispatch}:Props) {
     const [isActive, setIsActive] = useState<boolean>(false);
 
     return (
         <div className='w-full'>
             <div className='bg-[#272731] flex justify-between rounded-t-lg py-2 px-4 items-center'>
                 <h1 className='text-md font-medium'>Design</h1>
-                <div className='cursor-pointer' onClick={() => setIsActive(prevState => !prevState)}>
+                <div className='flex gap-4 items-center cursor-pointer'>
+                    <CircleX onClick={deleteGroupDispatch} size={15} className='cursor-pointer text-red-600 hover:text-red-800 transition duration-150' />
+                    <div className='text-gray-200 hover:text-gray-400 transition duration-150' onClick={() => setIsActive(prevState => !prevState)}>
                     {!isActive ?
                         <ChevronDown size={15} />
                         :
-                        <ChevronUp size={15} />
+                        <ChevronUp  size={15}/>
                     }
+                    </div>
                 </div>
             </div>
 
