@@ -3,7 +3,7 @@ import {makeAutoObservable} from 'mobx'
 export interface TaskType {
     id: string
     name: string
-    isCompleted: boolean | null
+    isCompleted: boolean
 }
 
 export interface TasksGroupType {
@@ -16,17 +16,21 @@ class Store {
     tasks: TasksGroupType[] = []
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
+        this.addGroup = this.addGroup.bind(this);
+        this.addTask = this.addTask.bind(this);
+        this.toggleTaskCompletion = this.toggleTaskCompletion.bind(this);
     }
 
     addTask(groupId: string, taskName: string) {
+       console.log(groupId, taskName)
         const group = this.tasks.find((group) => group.id === groupId);
         if (!group) {
             throw new Error(`Group with id ${groupId} not found`);
         }
-
+        console.log(group)
         const newTask: TaskType = {
-            id: crypto.randomUUID(),
+            id: String(Date.now()),
             name: taskName,
             isCompleted: false,
         };
@@ -38,36 +42,26 @@ class Store {
         group.tasks.push(newTask);
     }
 
-    addGroup(groupName: string){
-        const newGroup: TasksGroupType = {
-            id: crypto.randomUUID(),
-            name: groupName,
+    addGroup(name: string) {
+        this.tasks.push({
+            id: String(Date.now()),
+            name,
             tasks: [],
-        }
-        this.tasks.push(newGroup);
+        });
     }
 
-    deleteTask(taskId: string, groupId: string) {
-        const group = this.tasks.find((group) => group.id === groupId)
-        if (!group) {
-            throw new Error(`Group with id ${groupId} not found`);
-        }
+    toggleTaskCompletion(groupId: string, taskId: string) {
+        const group = this.tasks.find(group => group.id === groupId);
+        if (!group || !group.tasks) return;
 
-        if (!group.tasks) {
-            throw new Error(`No tasks in group with id ${groupId}`);
-        }
-
-        const taskIndex = group.tasks.findIndex((task) => task.id === taskId);
-        if (taskIndex === -1) {
-            throw new Error(`Task with id ${taskId} not found in group ${groupId}`);
-        }
-
-        group.tasks.splice(taskIndex, 1);
-
-        if (group.tasks.length === 0) {
-            group.tasks = null;
+        const task = group.tasks.find(task => task.id === taskId);
+        if (task) {
+            task.isCompleted = !task.isCompleted;
         }
     }
+
+
+
     deleteGroup(groupId: string) {
         const groupIndex = this.tasks.findIndex((group) => group.id === groupId);
         if (groupIndex === -1) {
@@ -78,4 +72,5 @@ class Store {
     }
 }
 
-export default Store;
+const store = new Store();
+export default store;
