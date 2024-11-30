@@ -15,6 +15,7 @@ export interface TasksGroupType {
 class Store {
     tasks: TasksGroupType[] = []
 
+
     constructor() {
         makeAutoObservable(this);
         this.addGroup = this.addGroup.bind(this);
@@ -22,13 +23,12 @@ class Store {
         this.toggleTaskCompletion = this.toggleTaskCompletion.bind(this);
     }
 
+
     addTask(groupId: string, taskName: string) {
-       console.log(groupId, taskName)
         const group = this.tasks.find((group) => group.id === groupId);
         if (!group) {
             throw new Error(`Group with id ${groupId} not found`);
         }
-        console.log(group)
         const newTask: TaskType = {
             id: String(Date.now()),
             name: taskName,
@@ -42,6 +42,7 @@ class Store {
         group.tasks.push(newTask);
     }
 
+
     addGroup(name: string) {
         this.tasks.push({
             id: String(Date.now()),
@@ -49,6 +50,7 @@ class Store {
             tasks: [],
         });
     }
+
 
     toggleTaskCompletion(groupId: string, taskId: string) {
         const group = this.tasks.find(group => group.id === groupId);
@@ -59,7 +61,6 @@ class Store {
             task.isCompleted = !task.isCompleted;
         }
     }
-
 
 
     deleteGroup(groupId: string) {

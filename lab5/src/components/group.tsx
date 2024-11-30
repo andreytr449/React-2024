@@ -2,6 +2,7 @@ import {ChevronDown, ChevronUp, CircleX, Plus} from "lucide-react";
 import {useState} from "react";
 import {TaskType} from "../store";
 import {Button} from "./button.tsx";
+import {observer} from "mobx-react-lite";
 
 type Props = {
     deleteGroupDispatch: (id: string) => void;
@@ -12,14 +13,14 @@ type Props = {
     name: string;
 };
 
-export function Group({
+export const Group =  observer(({
                           deleteGroupDispatch,
                           name,
                           id,
                           tasks,
                           addTask,
                           toggleTaskCompletion,
-                      }: Props) {
+                      }: Props) => {
     const [isActive, setIsActive] = useState<boolean>(false);
 
     return (
@@ -79,4 +80,4 @@ export function Group({
             </div>
         </div>
     );
-}
+})
